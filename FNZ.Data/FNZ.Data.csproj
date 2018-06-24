@@ -18,4 +18,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FNZ.Share\FNZ.Share.csproj" />
+  </ItemGroup>
+
 </Project>

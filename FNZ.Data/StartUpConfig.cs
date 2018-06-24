@@ -13,13 +13,13 @@ namespace FNZ.Data
         public StartUpConfig(IConfiguration configuration)
         {
             Configuration = configuration;
-            Server = Configuration.GetConnectionString("DefaultConnection");
+            Server = Configuration.GetConnectionString("MyConnection");
         }
 
         public void PartOfConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
         }
     }
 }
