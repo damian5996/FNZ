@@ -28,6 +28,7 @@ namespace FNZ.WebApi
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
                 c.AddSecurityDefinition("Authorization", new ApiKeyScheme() { In = "header", Description = "Please insert JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,11 +47,18 @@ namespace FNZ.WebApi
             app.UseStaticFiles();
 
             app.UseMvc();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+
+            app.UseCors(corsPolicyBuider => 
+                corsPolicyBuider.WithOrigins("*")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
         }
     }
 }
