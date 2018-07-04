@@ -1,4 +1,4 @@
-﻿using FNZ.Data;
+﻿using System.Diagnostics;
 using FNZ.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,13 +13,13 @@ namespace FNZ.Data
         public StartUpConfig(IConfiguration configuration)
         {
             Configuration = configuration;
-            Server = Configuration.GetConnectionString("MyConnection");
+            Server = Configuration.GetConnectionString("DefaultConnection");
         }
 
         public void PartOfConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
     }
 }

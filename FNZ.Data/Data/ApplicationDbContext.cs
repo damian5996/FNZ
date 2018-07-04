@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using FNZ.Share.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace FNZ.Data.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

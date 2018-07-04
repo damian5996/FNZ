@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using FNZ.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace FNZ.BL
 {
@@ -17,7 +19,6 @@ namespace FNZ.BL
 
         private static void AutoMapperConfiguration()
         {
-
         }
     }
 }
