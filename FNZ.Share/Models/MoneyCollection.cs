@@ -9,5 +9,6 @@ namespace FNZ.Share.Models
         public long Id { get; set; }
         public long MoneyTarget { get; set; }
         public DateTime EndDate { get; set; }
+        public Post Post { get; set; }
     }
 }

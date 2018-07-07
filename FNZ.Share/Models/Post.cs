@@ -9,7 +9,6 @@ namespace FNZ.Share.Models
         public long Id { get; set; }
         public string Author { get; set; }
         public DateTime AddedAt { get; set; }
-        public DateTime RequestSentAt { get; set; }
         public string RequestSentBy { get; set; }
         public Enums.Category Category { get; set; }
         public string Content { get; set; }

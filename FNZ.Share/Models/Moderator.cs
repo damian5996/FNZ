@@ -13,5 +13,6 @@ namespace FNZ.Share.Models
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public virtual List<Request> Requests{ get; set; }
     }
 }
