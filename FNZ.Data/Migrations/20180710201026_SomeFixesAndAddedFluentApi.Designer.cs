@@ -12,9 +12,10 @@ using System;
 namespace FNZ.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180710201026_SomeFixesAndAddedFluentApi")]
+    partial class SomeFixesAndAddedFluentApi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,19 +171,11 @@ namespace FNZ.Data.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<int?>("LastEditedById");
-
-                    b.Property<int?>("ModeratorId");
-
                     b.Property<string>("PhotoPath");
 
                     b.Property<int>("TabCategory");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LastEditedById");
-
-                    b.HasIndex("ModeratorId");
 
                     b.ToTable("Tabs");
                 });
@@ -217,17 +210,6 @@ namespace FNZ.Data.Migrations
                     b.HasOne("FNZ.Share.Models.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId");
-                });
-
-            modelBuilder.Entity("FNZ.Share.Models.Tab", b =>
-                {
-                    b.HasOne("FNZ.Share.Models.Moderator", "LastEditedBy")
-                        .WithMany()
-                        .HasForeignKey("LastEditedById");
-
-                    b.HasOne("FNZ.Share.Models.Moderator", "Moderator")
-                        .WithMany("Tabs")
-                        .HasForeignKey("ModeratorId");
                 });
 #pragma warning restore 612, 618
         }

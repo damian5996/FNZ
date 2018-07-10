@@ -16,5 +16,6 @@ namespace FNZ.Share.Models
         public string Breed { get; set; }
         public double Age { get; set; }
         public virtual Post Post { get; set; }
+        public virtual List<Application> Applications { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace FNZ.Share.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public virtual List<Request> Requests{ get; set; }
+        public virtual List<Tab> Tabs{ get; set; }
     }
 }

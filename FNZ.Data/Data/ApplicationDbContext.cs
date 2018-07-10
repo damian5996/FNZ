@@ -23,6 +23,45 @@ namespace FNZ.Data.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Animal>()
+                .HasKey(a => a.Id);
+            builder.Entity<Animal>()
+                .HasOne(a => a.Post);
+            builder.Entity<Animal>()
+                .HasMany(a => a.Applications)
+                .WithOne(a => a.Animal);
+
+            builder.Entity<Application>()
+                .HasKey(a => a.Id);
+            builder.Entity<Application>()
+                .HasOne(a => a.Animal);
+
+            builder.Entity<Moderator>()
+                .HasKey(a => a.Id);
+            builder.Entity<Moderator>()
+                .HasMany(a => a.Requests)
+                .WithOne(a => a.Moderator);
+            builder.Entity<Moderator>()
+                .HasMany(a => a.Tabs)
+                .WithOne(a => a.Moderator);
+
+            builder.Entity<MoneyCollection>()
+                .HasKey(a => a.Id);
+            builder.Entity<MoneyCollection>()
+                .HasOne(a => a.Post);
+
+            builder.Entity<Request>()
+                .HasKey(a => a.Id);
+            builder.Entity<Request>()
+                .HasOne(a => a.Post);
+            builder.Entity<Request>()
+                .HasOne(a => a.Moderator);
+
+            builder.Entity<Tab>()
+                .HasKey(a => a.Id);
+            builder.Entity<Tab>()
+                .HasOne(a => a.Moderator);
+
             base.OnModelCreating(builder);
         }
     }

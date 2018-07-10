@@ -10,5 +10,7 @@ namespace FNZ.Share.Models
         public Enums.TabCategory TabCategory { get; set; }
         public string Content { get; set; }
         public string PhotoPath { get; set; }
+        public Moderator LastEditedBy { get; set; }
+        public virtual Moderator Moderator { get; set; }
     }
 }

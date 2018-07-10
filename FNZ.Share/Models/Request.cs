@@ -11,5 +11,6 @@ namespace FNZ.Share.Models
         public DateTime RefusalDate { get; set; }
         public DateTime SentAt { get; set; }
         public virtual Post Post { get; set; }
+        public virtual Moderator Moderator { get; set; }
     }
 }
