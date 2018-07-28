@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BindingModels\" />
-    <Folder Include="ModelsDto\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Cors" Version="5.2.6" />
   </ItemGroup>
 

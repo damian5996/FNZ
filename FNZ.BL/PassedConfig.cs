@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using FNZ.Data;
+using FNZ.Data.Repository;
+using FNZ.Data.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -15,10 +17,8 @@ namespace FNZ.BL
         {
             var config = new StartUpConfig(configuration);
             config.PartOfConfigureServices(services);
-        }
-
-        private static void AutoMapperConfiguration()
-        {
+            services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<IRequestRepository, RequestRepository>();
         }
     }
 }

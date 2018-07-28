@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FNZ.BL;
+using FNZ.BL.Services;
+using FNZ.BL.Services.Interfaces;
 using FNZ.Data.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using AutoMapper;
 
 namespace FNZ.WebApi
 {
@@ -25,6 +28,8 @@ namespace FNZ.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             PassedConfig.Config(this.Configuration, services);
+            services.AddAutoMapper();
+            services.AddTransient<IPostService, PostService>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
