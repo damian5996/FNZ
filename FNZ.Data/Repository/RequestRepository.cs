@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FNZ.Data.Data;
 using FNZ.Data.Repository.Interfaces;
 using FNZ.Share.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FNZ.Data.Repository
 {
@@ -31,6 +33,13 @@ namespace FNZ.Data.Repository
         public bool Save()
         {
             return _dbContext.SaveChanges() > 0;
+        }
+
+        public Request Get(Func<Request, bool> function)
+        {
+            return _dbContext.Requests
+                .Include(r => r.Post)
+                .FirstOrDefault(function);
         }
     }
 }

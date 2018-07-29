@@ -30,6 +30,7 @@ namespace FNZ.WebApi
             PassedConfig.Config(this.Configuration, services);
             services.AddAutoMapper();
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IRequestService, RequestService>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {

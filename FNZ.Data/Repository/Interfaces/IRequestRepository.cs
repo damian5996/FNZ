@@ -11,5 +11,6 @@ namespace FNZ.Data.Repository.Interfaces
         Task<bool> InsertAsync(Request request);
         Task<bool> SaveAsync();
         bool Save();
+        Request Get(Func<Request, bool> function);
     }
 }
