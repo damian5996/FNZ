@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FNZ.Data.Data;
@@ -31,6 +32,11 @@ namespace FNZ.Data.Repository
         public bool Save()
         {
             return _dbContext.SaveChanges() > 0;
+        }
+
+        public Post Get(Func<Post, bool> function)
+        {
+            return _dbContext.Posts.FirstOrDefault(function);
         }
     }
 }

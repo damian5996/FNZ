@@ -24,14 +24,14 @@ namespace FNZ.BL.Services
             _requestRepository = requestRepository;
         }
 
-        public async Task<ResponseDto<BaseModelDto>> AddPost(AddPostBindingModel postToAdd)
+        public async Task<ResponseDto<BaseModelDto>> AddPost(AddPostBindingModel postToAdd /*int moderatorId*/)
         {
             var result = new ResponseDto<BaseModelDto>();
             var post = Mapper.Map<Post>(postToAdd);
             var insertPost = await _postRepository.InsertAsync(post);
             if (!insertPost)
             {
-                result.Errors.Add(ErrorsKeys.post_Adding, ErrorsValues.post_Adding);
+                result.Errors.Add(ErrorsKeys.post_Adding, ErrorsValues.post_AddingRequest);
                 return result;
             }
             
@@ -39,14 +39,42 @@ namespace FNZ.BL.Services
             {
                 SentAt = DateTime.Now,
                 Post = post,
+                Action = Enums.Action.Add
             };
             var insertRequest = await _requestRepository.InsertAsync(request);
             if (!insertRequest)
             {
-                result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_Adding);
+                result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_AddingRequest);
                 return result;
             }
             
+            return result;
+        }
+
+        public async Task<ResponseDto<BaseModelDto>> DeletePost(long postId)
+        {
+            var result = new ResponseDto<BaseModelDto>();
+
+            var post = _postRepository.Get(p => p.Id == postId);
+            if (post.AddedAt == null)
+            {
+                result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_NotAddedYet);
+                return result;
+            }
+
+            var request = new Request()
+            {
+                SentAt = DateTime.Now,
+                Post = post,
+                Action = Enums.Action.Delete
+            };
+            var insertRequest = await _requestRepository.InsertAsync(request);
+            if (!insertRequest)
+            {
+                result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_AddingRequest);
+                return result;
+            }
+
             return result;
         }
     }

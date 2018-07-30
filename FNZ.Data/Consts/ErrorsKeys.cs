@@ -9,5 +9,6 @@ namespace FNZ.Data.Consts
         public const string post_Adding = "postAddingError";
         public const string post_CreatingRequest = "postCreatingRequestError";
         public const string request_Refuse = "requestRefusingError";
+        public const string request_Accept = "requestAcceptingError";
     }
 }

@@ -27,5 +27,12 @@ namespace FNZ.Share.Models
             AboutFoundation,
             Voluntary
         }
+
+        public enum Action
+        {
+            Add,
+            Edit,
+            Delete
+        }
     }
 }

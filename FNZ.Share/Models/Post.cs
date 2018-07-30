@@ -13,5 +13,6 @@ namespace FNZ.Share.Models
         public string Content { get; set; }
         public string Title { get; set; }
         public string PhotoPath { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

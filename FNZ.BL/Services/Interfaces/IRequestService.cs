@@ -8,6 +8,7 @@ namespace FNZ.BL.Services.Interfaces
 {
     public interface IRequestService
     {
-        Task<ResponseDto<BaseModelDto>> RefuseRequest(long id);
+        Task<ResponseDto<BaseModelDto>> RefuseRequest(long requestId);
+        Task<ResponseDto<BaseModelDto>> AcceptRequest(long requestId);
     }
 }

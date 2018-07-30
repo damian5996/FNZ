@@ -17,10 +17,10 @@ namespace FNZ.WebApi.Controllers
             _requestService = requestService;
         }
 
-        [HttpPatch("{id}/Refuse")]
-        public async Task<IActionResult> RefuseRequest(long id)
+        [HttpPatch("{requestId}/Refuse")]
+        public async Task<IActionResult> RefuseRequest(long requestId)
         {
-            var result = await _requestService.RefuseRequest(id);
+            var result = await _requestService.RefuseRequest(requestId);
 
             if (result.ErrorOccurred)
             {
@@ -30,6 +30,18 @@ namespace FNZ.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPatch("{requestId}/Accept")]
+        public async Task<IActionResult> AcceptRequest(long requestId)
+        {
+            var result = await _requestService.AcceptRequest(requestId);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
 
     }
 }

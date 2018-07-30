@@ -34,5 +34,22 @@ namespace FNZ.WebApi.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeletePost(long id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _postService.DeletePost(id);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

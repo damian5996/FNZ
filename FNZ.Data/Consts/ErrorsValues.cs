@@ -6,8 +6,16 @@ namespace FNZ.Data.Consts
 {
     public class ErrorsValues
     {
+        public const string post_AddingRequest = "Wystąpił błąd podczas wysyłania prośby o dodanie postu.";
+        public const string post_DeletingRequest = "Wystąpił błąd podczas wysyłania prośby o usunięcie postu.";
+        public const string post_NotAddedYet = "Ten post jeszcze nie został dodany";
+        public const string post_NotFoundInDb = "Nie znaleziono postu, którego dotyczy prośba";
         public const string post_Adding = "Wystąpił błąd podczas dodawania postu.";
+
         public const string request_Refuse = "Wystąpił błąd podczas odrzucania prośby.";
+        public const string request_Accept = "Wystąpił błąd podczas akceptacji prośby.";
         public const string request_NotExist = "Taka prośba nie istnieje";
+        public const string request_AlreadySolved = "Ta prośba została już rozstrzygnięta";
+        
     }
 }
