@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FNZ.BL.Services.Interfaces;
 using FNZ.Data.Consts;
 using FNZ.Data.Repository.Interfaces;
@@ -68,6 +69,8 @@ namespace FNZ.BL.Services
                 result.Errors.Add(ErrorsKeys.request_Accept, ErrorsValues.request_AlreadySolved);
                 return result;
             }
+
+            var editedPost = _postRepository.Get(p => p.Id == request.EditedPost.Id); 
             request.AcceptanceDate = DateTime.Now;
             var saveRequest = await _requestRepository.SaveAsync();
             switch (request.Action)
@@ -76,14 +79,28 @@ namespace FNZ.BL.Services
                     post.AddedAt = DateTime.Now;
                     break;
                 case Enums.Action.Edit:
+                    //post = Mapper.Map<Post,Post>(editedPost);
+                    post.Author = editedPost.Author;
+                    post.Category = editedPost.Category;
+                    post.Content = editedPost.Content;
+                    post.Title = editedPost.Title;
+                    post.PhotoPath = editedPost.PhotoPath;
+                    post.EditedAt = DateTime.Now;
                     break;
                 case Enums.Action.Delete:
                     post.IsDeleted = true;
                     break;
             }
             var savePost = await _postRepository.SaveAsync();
-            
+
             if (!saveRequest || !savePost)
+            {
+                result.Errors.Add(ErrorsKeys.request_Accept, ErrorsValues.request_Accept);
+                return result;
+            }
+
+            var deletePost = await _postRepository.Remove(editedPost);
+            if (!deletePost)
             {
                 result.Errors.Add(ErrorsKeys.request_Accept, ErrorsValues.request_Accept);
                 return result;

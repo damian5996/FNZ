@@ -12,5 +12,7 @@ namespace FNZ.Data.Repository.Interfaces
         Task<bool> SaveAsync();
         bool Save();
         Post Get(Func<Post, bool> function);
+        Task<bool> Remove(Post post);
+        List<Post> GetAll(Func<Post, bool> function);
     }
 }

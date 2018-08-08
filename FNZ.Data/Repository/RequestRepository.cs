@@ -39,6 +39,7 @@ namespace FNZ.Data.Repository
         {
             return _dbContext.Requests
                 .Include(r => r.Post)
+                .Include(r => r.EditedPost)
                 .FirstOrDefault(function);
         }
     }

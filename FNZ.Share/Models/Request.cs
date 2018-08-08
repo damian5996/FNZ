@@ -12,6 +12,7 @@ namespace FNZ.Share.Models
         public DateTime SentAt { get; set; }
         public Enums.Action Action{ get; set; }
         public virtual Post Post { get; set; }
+        public virtual Post EditedPost { get; set; }
         public virtual Moderator Moderator { get; set; }
     }
 }

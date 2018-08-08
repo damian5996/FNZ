@@ -5,7 +5,7 @@ using FNZ.Share.Models;
 
 namespace FNZ.Share.BindingModels
 {
-    public class AddPostBindingModel
+    public class PostBindingModel
     {
         public string Author { get; set; }
         public Enums.Category Category { get; set; }

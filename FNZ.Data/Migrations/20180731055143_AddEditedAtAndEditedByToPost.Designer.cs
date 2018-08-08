@@ -12,9 +12,10 @@ using System;
 namespace FNZ.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180731055143_AddEditedAtAndEditedByToPost")]
+    partial class AddEditedAtAndEditedByToPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,8 +155,6 @@ namespace FNZ.Data.Migrations
 
                     b.Property<int>("Action");
 
-                    b.Property<long?>("EditedPostId");
-
                     b.Property<int?>("ModeratorId");
 
                     b.Property<long?>("PostId");
@@ -165,8 +164,6 @@ namespace FNZ.Data.Migrations
                     b.Property<DateTime>("SentAt");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EditedPostId");
 
                     b.HasIndex("ModeratorId");
 
@@ -229,10 +226,6 @@ namespace FNZ.Data.Migrations
 
             modelBuilder.Entity("FNZ.Share.Models.Request", b =>
                 {
-                    b.HasOne("FNZ.Share.Models.Post", "EditedPost")
-                        .WithMany()
-                        .HasForeignKey("EditedPostId");
-
                     b.HasOne("FNZ.Share.Models.Moderator", "Moderator")
                         .WithMany("Requests")
                         .HasForeignKey("ModeratorId");

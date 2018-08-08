@@ -18,8 +18,24 @@ namespace FNZ.WebApi.Controllers
             _postService = postService;
         }
 
+        [HttpPost()]
+        public async Task<IActionResult> GetAllPosts(PostSearchParameterBindingModel parameters)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _postService.GetAllPosts(parameters);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
         [HttpPost("Add")]
-        public async Task<IActionResult> AddPost([FromBody] AddPostBindingModel postBindingModel)
+        public async Task<IActionResult> AddPost([FromBody] PostBindingModel postBindingModel)
         {
             if (!ModelState.IsValid)
             {
@@ -35,14 +51,31 @@ namespace FNZ.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Delete")]
-        public async Task<IActionResult> DeletePost(long id)
+        [HttpDelete("{postId}/Delete")]
+        public async Task<IActionResult> DeletePost(long postId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _postService.DeletePost(id);
+            var result = await _postService.DeletePost(postId);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPatch("{postId}/Edit")]
+        public async Task<IActionResult> EditPost(long postId, PostBindingModel editPostBindingModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _postService.EditPost(postId, editPostBindingModel);
 
             if (result.ErrorOccurred)
             {

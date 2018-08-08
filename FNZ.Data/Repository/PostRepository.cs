@@ -38,5 +38,17 @@ namespace FNZ.Data.Repository
         {
             return _dbContext.Posts.FirstOrDefault(function);
         }
+
+        public async Task<bool> Remove(Post post)
+        {
+            _dbContext.Remove(post);
+            var result = await SaveAsync();
+            return result;
+        }
+
+        public List<Post> GetAll(Func<Post, bool> function)
+        {
+            return _dbContext.Posts.Where(function).ToList();
+        }
     }
 }
