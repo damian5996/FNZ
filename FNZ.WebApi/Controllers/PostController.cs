@@ -18,6 +18,23 @@ namespace FNZ.WebApi.Controllers
             _postService = postService;
         }
 
+        [HttpGet("{postId}")]
+        public IActionResult GetPost(long postId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _postService.GetPost(postId);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPost()]
         public async Task<IActionResult> GetAllPosts(PostSearchParameterBindingModel parameters)
         {

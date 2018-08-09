@@ -26,7 +26,22 @@ namespace FNZ.BL.Services
             _postRepository = postRepository;
             _requestRepository = requestRepository;
         }
-        
+
+        public ResponseDto<PostDto> GetPost(long postId)
+        {
+            var result = new ResponseDto<PostDto>();
+
+            var post = _postRepository.Get(p => p.Id == postId && p.AddedAt != null);
+            if (post == null)
+            {
+                result.Errors.Add(ErrorsKeys.post_GetById, ErrorsValues.post_NotFound);
+            }
+            var postDto = Mapper.Map<PostDto>(post);
+            result.Object = postDto;
+
+            return result;
+        }
+
         public async Task<ResponseDto<BaseModelDto>> AddPost(PostBindingModel postToAdd /*int moderatorId*/)
         {
             var result = new ResponseDto<BaseModelDto>();

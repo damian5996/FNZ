@@ -13,5 +13,6 @@ namespace FNZ.BL.Services.Interfaces
         Task<ResponseDto<BaseModelDto>> DeletePost(long postId);
         Task<ResponseDto<BaseModelDto>> EditPost(long postId, PostBindingModel editPostBindingModel);
         Task<ResponseDto<PostSearchDto>> GetAllPosts(PostSearchParameterBindingModel parameters);
+        ResponseDto<PostDto> GetPost(long postId);
     }
 }
