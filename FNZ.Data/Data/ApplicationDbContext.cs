@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using FNZ.Share.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FNZ.Data.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -44,6 +45,17 @@ namespace FNZ.Data.Data
             builder.Entity<Moderator>()
                 .HasMany(a => a.Tabs)
                 .WithOne(a => a.Moderator);
+            builder.Entity<Moderator>()
+                .Ignore(a => a.EmailConfirmed)
+                .Ignore(a => a.AccessFailedCount)
+                .Ignore(a => a.LockoutEnabled)
+                .Ignore(a => a.LockoutEnd)
+                .Ignore(a => a.NormalizedEmail)
+                .Ignore(a => a.PhoneNumber)
+                .Ignore(a => a.PhoneNumberConfirmed)
+                .Ignore(a => a.TwoFactorEnabled)
+                .Ignore(a => a.NormalizedUserName)
+                .ToTable("Moderators");
 
             builder.Entity<MoneyCollection>()
                 .HasKey(a => a.Id);

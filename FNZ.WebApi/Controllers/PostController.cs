@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FNZ.BL.Services.Interfaces;
 using FNZ.Share.BindingModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FNZ.WebApi.Controllers
@@ -34,9 +35,9 @@ namespace FNZ.WebApi.Controllers
 
             return Ok(result);
         }
-
+        
         [HttpPost()]
-        public async Task<IActionResult> GetAllPosts(PostSearchParameterBindingModel parameters)
+        public async Task<IActionResult> GetAllPosts([FromBody]PostSearchParameterBindingModel parameters)
         {
             if (!ModelState.IsValid)
             {
@@ -51,6 +52,8 @@ namespace FNZ.WebApi.Controllers
 
             return Ok(result);
         }
+
+        [Authorize]
         [HttpPost("Add")]
         public async Task<IActionResult> AddPost([FromBody] PostBindingModel postBindingModel)
         {

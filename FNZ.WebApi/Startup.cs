@@ -31,13 +31,20 @@ namespace FNZ.WebApi
             services.AddAutoMapper();
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<IAccountService, AccountService>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
                 c.AddSecurityDefinition("Authorization", new ApiKeyScheme() { In = "header", Description = "Please insert JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
             });
-            services.AddCors();
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowAnyOrigin();
+                builder.AllowCredentials();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,8 +60,10 @@ namespace FNZ.WebApi
                 app.UseExceptionHandler("/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseAuthentication();
 
+            app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
             app.UseMvc();
 
             app.UseSwagger();
@@ -62,12 +71,8 @@ namespace FNZ.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
-            app.UseCors(corsPolicyBuider => 
-                corsPolicyBuider.WithOrigins("*")
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-            );
+                
+            
         }
     }
 }

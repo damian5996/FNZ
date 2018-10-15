@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FNZ.Data.Consts
+﻿namespace FNZ.Share.Consts
 {
     public class ErrorsValues
     {
+        public const string account_wrongCredentials = "Błędna nazwa użytkownika lub hasło";
+        public const string account_userAlreadyExists = "Użytkownik o takim loginie już istnieje.";
+
         public const string post_AddingRequest = "Wystąpił błąd podczas wysyłania prośby o dodanie postu.";
         public const string post_DeletingRequest = "Wystąpił błąd podczas wysyłania prośby o usunięcie postu.";
         public const string post_EditingRequest = "Wystąpił błąd podczas wysyłania prośby o edycję postu.";
@@ -17,8 +16,10 @@ namespace FNZ.Data.Consts
 
         public const string request_Refuse = "Wystąpił błąd podczas odrzucania prośby.";
         public const string request_Accept = "Wystąpił błąd podczas akceptacji prośby.";
-        public const string request_NotExist = "Taka prośba nie istnieje";
-        public const string request_AlreadySolved = "Ta prośba została już rozstrzygnięta";
+        public const string request_NotExist = "Taka prośba nie istnieje.";
+        public const string request_AlreadySolved = "Ta prośba została już rozstrzygnięta.";
+
+       
         
     }
 }

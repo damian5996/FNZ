@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -8,9 +9,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using FNZ.BL.Services.Interfaces;
-using FNZ.Data.Consts;
 using FNZ.Data.Repository.Interfaces;
 using FNZ.Share.BindingModels;
+using FNZ.Share.Consts;
 using FNZ.Share.Models;
 using FNZ.Share.ModelsDto;
 
@@ -20,6 +21,7 @@ namespace FNZ.BL.Services
     {
         private readonly IPostRepository _postRepository;
         private readonly IRequestRepository _requestRepository;
+        private const string uploadFolder = "wwwroot\\postImages";
 
         public PostService(IPostRepository postRepository, IRequestRepository requestRepository)
         {
@@ -42,6 +44,18 @@ namespace FNZ.BL.Services
             return result;
         }
 
+        public string GetUploadFilePath(string postToAddPath, long postId)
+        {
+            var pathArray = postToAddPath.ToCharArray();
+            var reversedArray = pathArray.Reverse();
+            var reversedString = new string(reversedArray.ToArray());
+            var nameArray = reversedString.Substring(0, reversedString.IndexOf("\\")).Reverse();
+            var name = new string(nameArray.ToArray());
+            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), uploadFolder + "\\" + postId));
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), uploadFolder + "\\" + postId + "\\" + name);
+            File.Copy(postToAddPath, uploadPath);
+            return name;
+        }
         public async Task<ResponseDto<BaseModelDto>> AddPost(PostBindingModel postToAdd /*int moderatorId*/)
         {
             var result = new ResponseDto<BaseModelDto>();
@@ -52,7 +66,19 @@ namespace FNZ.BL.Services
                 result.Errors.Add(ErrorsKeys.post_Adding, ErrorsValues.post_AddingRequest);
                 return result;
             }
-            
+
+            if (postToAdd.PhotoPath != null)
+            {
+                post.PhotoPath = GetUploadFilePath(postToAdd.PhotoPath, post.Id);
+
+            }
+            var updatePost = await _postRepository.SaveAsync();
+            if (!updatePost)
+            {
+                result.Errors.Add(ErrorsKeys.post_Adding, ErrorsValues.post_AddingRequest);
+                return result;
+            }
+
             var request = new Request()
             {
                 SentAt = DateTime.Now,
@@ -157,9 +183,11 @@ namespace FNZ.BL.Services
             {
                 posts = await GetPostsByParameters(parameters, false);
             }
+            
             int totalPageCount = (int)Math.Ceiling((decimal)posts.Count() / parameters.Limit);
             posts = Sort(posts, parameters);
             posts = posts.Skip(parameters.Limit * (parameters.PageNumber - 1)).Take(parameters.Limit);
+            
             return new PostSearchDto()
             {
                 Posts = posts.ToList(),
@@ -186,13 +214,22 @@ namespace FNZ.BL.Services
         }
         public async Task<IQueryable<Post>> GetPostsByParameters(PostSearchParameterBindingModel parameters, bool useFunction)
         {
-            IQueryable<Post> posts = _postRepository.GetAll(p => p.AddedAt != null).AsQueryable();
+            IQueryable<Post> posts;
+            if (parameters.Category == null)
+            {
+                posts = _postRepository.GetAll(p => p.AddedAt != null).AsQueryable();
+            }
+            else
+            {
+                posts = _postRepository.GetAll(p => p.AddedAt != null && p.Category == parameters.Category).AsQueryable();
+            }
+            var query = parameters.Query.ToLower();
             if (useFunction)
             {
                 Expression<Func<Post, bool>> function = x =>
-                    x.Title.Contains(parameters.Query) || x.Content.Contains(parameters.Query) ||
-                    x.Author.Contains(parameters.Query);
-
+                    x.Title.ToLower().Contains(query) || x.Content.ToLower().Contains(query) ||
+                    x.Author.ToLower().Contains(query);
+                
                 return posts.Where(function);
             }
 

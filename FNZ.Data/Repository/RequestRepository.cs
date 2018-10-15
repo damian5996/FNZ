@@ -42,5 +42,9 @@ namespace FNZ.Data.Repository
                 .Include(r => r.EditedPost)
                 .FirstOrDefault(function);
         }
+        public List<Request> GetAll(Func<Request, bool> function)
+        {
+            return _dbContext.Requests.Include(r => r.Post).Where(function).ToList();
+        }
     }
 }

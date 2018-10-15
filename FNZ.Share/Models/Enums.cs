@@ -10,8 +10,7 @@ namespace FNZ.Share.Models
         {
             DogsAdoption,
             CatsAdoption,
-            DogsAdopted,
-            CatsAdopted,
+            FullfilledDreams,
             MoneyCollection,
             FoundationLife
         }
@@ -33,6 +32,13 @@ namespace FNZ.Share.Models
             Add,
             Edit,
             Delete
+        }
+
+        public enum RequestStatus
+        {
+            InProgress,
+            Accepted,
+            Refused
         }
     }
 }

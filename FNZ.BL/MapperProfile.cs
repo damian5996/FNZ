@@ -19,12 +19,15 @@ namespace FNZ.BL
         {
             CreateMap<Post, PostBindingModel>();
             CreateMap<PostBindingModel, Post>()
-                .ForMember(dest => dest.AddedAt, opt => opt.UseValue(true));
-            //.ForMember(dest => dest.AddedAt, opt => opt.Ignore());
+                .ForMember(dest => dest.AddedAt, opt => opt.Ignore());
             //CreateMap<Post, Post>()
             //    .ForMember(dest => dest.AddedAt, opt => opt.Ignore())
             //    .AfterMap((src, dest) => dest.AddedAt = src.AddedAt);
             CreateMap<Post, PostDto>();
+            CreateMap<Moderator, LoginDto>();
+            CreateMap<Request, RequestDto>()
+                .ForMember(o => o.Post, m => m.MapFrom(x => x.Post));
+            CreateMap<AnimalBindingModel, Animal>();
         }
     }
 }
