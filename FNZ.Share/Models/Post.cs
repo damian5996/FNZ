@@ -16,5 +16,7 @@ namespace FNZ.Share.Models
         public string Title { get; set; }
         public string PhotoPath { get; set; }
         public bool IsDeleted { get; set; }
+        public virtual Animal Animal { get; set; }
+
     }
 }

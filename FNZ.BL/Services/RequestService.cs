@@ -10,6 +10,7 @@ using FNZ.Share.BindingModels;
 using FNZ.Share.Consts;
 using FNZ.Share.Models;
 using FNZ.Share.ModelsDto;
+using Microsoft.AspNetCore.Identity;
 
 namespace FNZ.BL.Services
 {
@@ -17,11 +18,13 @@ namespace FNZ.BL.Services
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IPostRepository _postRepository;
+        private readonly UserManager<Moderator> _userManager;
 
-        public RequestService(IRequestRepository requestRepository, IPostRepository postRepository)
+        public RequestService(IRequestRepository requestRepository, IPostRepository postRepository, UserManager<Moderator> userManager)
         {
             _requestRepository = requestRepository;
             _postRepository = postRepository;
+            _userManager = userManager;
         }
 
         public ResponseDto<RequestsListDto> GetAllRequests(RequestParameterBindingModel parameters)
@@ -102,7 +105,7 @@ namespace FNZ.BL.Services
             //        requestsDto.ForEach(r => r.AcceptanceDate = null);
             //        break;
             //}
-            requestsDto.ForEach(r => r.PostTitle = _postRepository.Get(p => p.Id == r.Post.Id).Title);
+            requestsDto.ForEach(r => r.PostTitle = _postRepository.Get(p => p.Id == r.PostDto.Id).Title);
             result.Object = new RequestsListDto()
             {
                 Requests = requestsDto,
@@ -110,6 +113,18 @@ namespace FNZ.BL.Services
                 TotalPageCount = totalPageCount
             };
 
+            return result;
+        }
+
+        public ResponseDto<RequestDto> GetRequestDetails(long requestId)
+        {
+            var result = new ResponseDto<RequestDto>()
+            {
+                Object = new RequestDto()
+            };
+            var request = _requestRepository.Get(r => r.Id == requestId);
+
+            result.Object = Mapper.Map<RequestDto>(request);
             return result;
         }
 

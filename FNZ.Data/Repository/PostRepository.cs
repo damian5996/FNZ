@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FNZ.Data.Data;
 using FNZ.Data.Repository.Interfaces;
 using FNZ.Share.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FNZ.Data.Repository
 {
@@ -36,7 +37,7 @@ namespace FNZ.Data.Repository
 
         public Post Get(Func<Post, bool> function)
         {
-            return _dbContext.Posts.FirstOrDefault(function);
+            return _dbContext.Posts.Include(x => x.Animal).FirstOrDefault(function);
         }
 
         public async Task<bool> Remove(Post post)
@@ -48,7 +49,7 @@ namespace FNZ.Data.Repository
 
         public List<Post> GetAll(Func<Post, bool> function)
         {
-            return _dbContext.Posts.Where(function).ToList();
+            return _dbContext.Posts.Include(x => x.Animal).Where(function).ToList();
         }
     }
 }

@@ -52,16 +52,16 @@ namespace FNZ.WebApi.Controllers
 
             return Ok(result);
         }
-
-        [Authorize]
+        
         [HttpPost("Add")]
-        public async Task<IActionResult> AddPost([FromBody] PostBindingModel postBindingModel)
+        public async Task<IActionResult> AddPost([FromForm] PostBindingModel postBindingModel)
         {
+            var moderatorId = User.Identity.Name;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _postService.AddPost(postBindingModel);
+            var result = await _postService.AddPost(postBindingModel, moderatorId);
 
             if (result.ErrorOccurred)
             {

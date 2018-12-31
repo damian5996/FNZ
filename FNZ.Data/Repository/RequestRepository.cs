@@ -44,7 +44,7 @@ namespace FNZ.Data.Repository
         }
         public List<Request> GetAll(Func<Request, bool> function)
         {
-            return _dbContext.Requests.Include(r => r.Post).Where(function).ToList();
+            return _dbContext.Requests.Include(r => r.Moderator).Include(r => r.Post).Where(function).ToList();
         }
     }
 }

@@ -11,10 +11,11 @@ namespace FNZ.Share.ModelsDto
         public string Author { get; set; }
         public DateTime? AddedAt { get; set; }
         public DateTime? EditedAt { get; set; }
-        public Moderator EditedBy { get; set; }
+        public ModeratorDto EditedBy { get; set; }
         public Enums.Category Category { get; set; }
         public string Content { get; set; }
         public string Title { get; set; }
         public string PhotoPath { get; set; }
+        public AnimalDto AnimalDto { get; set; }
     }
 }

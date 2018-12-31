@@ -4,14 +4,16 @@ using FNZ.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FNZ.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181229095223_ChangedMaxWeightFromIntToDouble")]
+    partial class ChangedMaxWeightFromIntToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,23 +27,27 @@ namespace FNZ.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("AddedToSystemAt");
+                    b.Property<DateTime>("AddedToSystemAt");
 
-                    b.Property<DateTime?>("AdoptionDate");
+                    b.Property<DateTime>("AdoptionDate");
 
-                    b.Property<string>("Age");
+                    b.Property<double>("Age");
 
                     b.Property<string>("Breed");
 
                     b.Property<DateTime>("FoundAt");
 
-                    b.Property<string>("MaxWeight");
+                    b.Property<double>("MaxWeight");
 
                     b.Property<string>("Name");
+
+                    b.Property<long?>("PostId");
 
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Animals");
                 });
@@ -125,8 +131,6 @@ namespace FNZ.Data.Migrations
 
                     b.Property<DateTime?>("AddedAt");
 
-                    b.Property<long?>("AnimalId");
-
                     b.Property<string>("Author");
 
                     b.Property<int>("Category");
@@ -144,8 +148,6 @@ namespace FNZ.Data.Migrations
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
 
                     b.HasIndex("EditedById");
 
@@ -208,6 +210,13 @@ namespace FNZ.Data.Migrations
                     b.ToTable("Tabs");
                 });
 
+            modelBuilder.Entity("FNZ.Share.Models.Animal", b =>
+                {
+                    b.HasOne("FNZ.Share.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId");
+                });
+
             modelBuilder.Entity("FNZ.Share.Models.Application", b =>
                 {
                     b.HasOne("FNZ.Share.Models.Animal", "Animal")
@@ -224,10 +233,6 @@ namespace FNZ.Data.Migrations
 
             modelBuilder.Entity("FNZ.Share.Models.Post", b =>
                 {
-                    b.HasOne("FNZ.Share.Models.Animal", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId");
-
                     b.HasOne("FNZ.Share.Models.Moderator", "EditedBy")
                         .WithMany()
                         .HasForeignKey("EditedById");

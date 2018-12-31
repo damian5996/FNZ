@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FNZ.Share.Models;
 
-namespace FNZ.Share.Models
+namespace FNZ.Share.ModelsDto
 {
-    public class Animal
+    public class AnimalDto : BaseModelDto
     {
         public long Id { get; set; }
         public DateTime? AdoptionDate { get; set; }
@@ -15,6 +16,5 @@ namespace FNZ.Share.Models
         public string MaxWeight { get; set; }
         public string Breed { get; set; }
         public string Age { get; set; }
-        public virtual List<Application> Applications { get; set; }
     }
 }

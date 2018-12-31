@@ -27,8 +27,6 @@ namespace FNZ.Data.Data
             builder.Entity<Animal>()
                 .HasKey(a => a.Id);
             builder.Entity<Animal>()
-                .HasOne(a => a.Post);
-            builder.Entity<Animal>()
                 .HasMany(a => a.Applications)
                 .WithOne(a => a.Animal);
 
@@ -73,6 +71,9 @@ namespace FNZ.Data.Data
                 .HasKey(a => a.Id);
             builder.Entity<Tab>()
                 .HasOne(a => a.Moderator);
+
+            builder.Entity<Post>()
+                .HasOne(a => a.Animal);
 
             base.OnModelCreating(builder);
         }

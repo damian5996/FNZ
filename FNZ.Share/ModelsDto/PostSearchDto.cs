@@ -7,7 +7,7 @@ namespace FNZ.Share.ModelsDto
 {
     public class PostSearchDto : BaseModelDto
     {
-        public List<Post> Posts { get; set; }
+        public List<PostDto> PostsDto { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPageCount { get; set; }
     }

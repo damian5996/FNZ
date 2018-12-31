@@ -4,14 +4,16 @@ using FNZ.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FNZ.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181229102536_ChangedRelationsBetweenAnimalAndPost")]
+    partial class ChangedRelationsBetweenAnimalAndPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,17 +27,17 @@ namespace FNZ.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("AddedToSystemAt");
+                    b.Property<DateTime>("AddedToSystemAt");
 
-                    b.Property<DateTime?>("AdoptionDate");
+                    b.Property<DateTime>("AdoptionDate");
 
-                    b.Property<string>("Age");
+                    b.Property<double>("Age");
 
                     b.Property<string>("Breed");
 
                     b.Property<DateTime>("FoundAt");
 
-                    b.Property<string>("MaxWeight");
+                    b.Property<double>("MaxWeight");
 
                     b.Property<string>("Name");
 

@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using FNZ.BL.Services.Interfaces;
 using FNZ.Share.BindingModels;
 using FNZ.Share.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FNZ.WebApi.Controllers
 {
     [Route("Requests")]
+    [Authorize]
     public class RequestController : Controller
     {
         private readonly IRequestService _requestService;
@@ -49,6 +51,19 @@ namespace FNZ.WebApi.Controllers
         public IActionResult GetAllRequest([FromBody]RequestParameterBindingModel parameters)
         {
             var result = _requestService.GetAllRequests(parameters);
+
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("{requestId}")]
+        public IActionResult GetRequestDetails(long requestId)
+        {
+            var result = _requestService.GetRequestDetails(requestId);
 
             if (result.ErrorOccurred)
             {

@@ -19,6 +19,7 @@ namespace FNZ.BL
             config.PartOfConfigureServices(services);
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IRequestRepository, RequestRepository>();
+            services.AddTransient<IAnimalRepository, AnimalRepository>();
         }
     }
 }

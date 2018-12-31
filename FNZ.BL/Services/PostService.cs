@@ -14,6 +14,7 @@ using FNZ.Share.BindingModels;
 using FNZ.Share.Consts;
 using FNZ.Share.Models;
 using FNZ.Share.ModelsDto;
+using Microsoft.AspNetCore.Identity;
 
 namespace FNZ.BL.Services
 {
@@ -21,12 +22,16 @@ namespace FNZ.BL.Services
     {
         private readonly IPostRepository _postRepository;
         private readonly IRequestRepository _requestRepository;
-        private const string uploadFolder = "wwwroot\\postImages";
+        private readonly UserManager<Moderator> _userManager;
+        private readonly IAnimalRepository _animalRepository;
+        private const string uploadMainFolder = "wwwroot\\postImages";
 
-        public PostService(IPostRepository postRepository, IRequestRepository requestRepository)
+        public PostService(IPostRepository postRepository, IRequestRepository requestRepository, UserManager<Moderator> userManager, IAnimalRepository animalRepository)
         {
             _postRepository = postRepository;
             _requestRepository = requestRepository;
+            _userManager = userManager;
+            _animalRepository = animalRepository;
         }
 
         public ResponseDto<PostDto> GetPost(long postId)
@@ -43,34 +48,46 @@ namespace FNZ.BL.Services
 
             return result;
         }
-
-        public string GetUploadFilePath(string postToAddPath, long postId)
-        {
-            var pathArray = postToAddPath.ToCharArray();
-            var reversedArray = pathArray.Reverse();
-            var reversedString = new string(reversedArray.ToArray());
-            var nameArray = reversedString.Substring(0, reversedString.IndexOf("\\")).Reverse();
-            var name = new string(nameArray.ToArray());
-            Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), uploadFolder + "\\" + postId));
-            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), uploadFolder + "\\" + postId + "\\" + name);
-            File.Copy(postToAddPath, uploadPath);
-            return name;
-        }
-        public async Task<ResponseDto<BaseModelDto>> AddPost(PostBindingModel postToAdd /*int moderatorId*/)
+        
+        public async Task<ResponseDto<BaseModelDto>> AddPost(PostBindingModel postToAdd, string moderatorId)
         {
             var result = new ResponseDto<BaseModelDto>();
             var post = Mapper.Map<Post>(postToAdd);
+            
             var insertPost = await _postRepository.InsertAsync(post);
             if (!insertPost)
             {
                 result.Errors.Add(ErrorsKeys.post_Adding, ErrorsValues.post_AddingRequest);
                 return result;
             }
-
-            if (postToAdd.PhotoPath != null)
+            var fileName = "";
+            var uploadFolder = $"{uploadMainFolder}\\{post.Id}";
+            if (postToAdd.File != null)
             {
-                post.PhotoPath = GetUploadFilePath(postToAdd.PhotoPath, post.Id);
+                if (!Directory.Exists(uploadFolder)) Directory.CreateDirectory(uploadFolder);
 
+                fileName = Guid.NewGuid() + Path.GetExtension(postToAdd.File.FileName);
+                var path = Path.Combine(uploadFolder,
+                    fileName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await postToAdd.File.CopyToAsync(stream);
+                }
+            }
+
+            post.PhotoPath = fileName;
+            if (postToAdd.Category == Enums.Category.CatsAdoption || postToAdd.Category == Enums.Category.DogsAdoption)
+            {
+                var animal = Mapper.Map<Animal>(postToAdd);
+                animal.Type = postToAdd.Category == Enums.Category.CatsAdoption ? Enums.Type.Cat : Enums.Type.Dog;
+                var insertAnimal = await _animalRepository.InsertAsync(animal);
+                if (!insertAnimal)
+                {
+                    result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_AddingRequest);
+                    return result;
+                }
+
+                post.Animal = animal;
             }
             var updatePost = await _postRepository.SaveAsync();
             if (!updatePost)
@@ -79,11 +96,13 @@ namespace FNZ.BL.Services
                 return result;
             }
 
+            var moderator = _userManager.FindByIdAsync(moderatorId);
             var request = new Request()
             {
                 SentAt = DateTime.Now,
                 Post = post,
-                Action = Enums.Action.Add
+                Action = Enums.Action.Add,
+                Moderator = moderator.Result
             };
             var insertRequest = await _requestRepository.InsertAsync(request);
             if (!insertRequest)
@@ -187,10 +206,10 @@ namespace FNZ.BL.Services
             int totalPageCount = (int)Math.Ceiling((decimal)posts.Count() / parameters.Limit);
             posts = Sort(posts, parameters);
             posts = posts.Skip(parameters.Limit * (parameters.PageNumber - 1)).Take(parameters.Limit);
-            
+            var postsMapped = Mapper.Map<List<PostDto>>(posts.ToList());
             return new PostSearchDto()
             {
-                Posts = posts.ToList(),
+                PostsDto = postsMapped,
                 CurrentPage = parameters.PageNumber,
                 TotalPageCount = totalPageCount
             };
@@ -212,6 +231,7 @@ namespace FNZ.BL.Services
 
             return posts;
         }
+
         public async Task<IQueryable<Post>> GetPostsByParameters(PostSearchParameterBindingModel parameters, bool useFunction)
         {
             IQueryable<Post> posts;
