@@ -39,7 +39,9 @@ namespace FNZ.Data.Repository
         {
             return _dbContext.Requests
                 .Include(r => r.Post)
+                    .ThenInclude(r => r.Animal)
                 .Include(r => r.EditedPost)
+                .Include(r => r.Moderator)
                 .FirstOrDefault(function);
         }
         public List<Request> GetAll(Func<Request, bool> function)

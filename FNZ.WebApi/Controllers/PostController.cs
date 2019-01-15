@@ -74,11 +74,12 @@ namespace FNZ.WebApi.Controllers
         [HttpDelete("{postId}/Delete")]
         public async Task<IActionResult> DeletePost(long postId)
         {
+            var moderatorId = User.Identity.Name;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _postService.DeletePost(postId);
+            var result = await _postService.DeletePost(postId, moderatorId);
 
             if (result.ErrorOccurred)
             {

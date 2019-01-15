@@ -4,6 +4,7 @@
     {
         public const string account_wrongCredentials = "Błędna nazwa użytkownika lub hasło";
         public const string account_userAlreadyExists = "Użytkownik o takim loginie już istnieje.";
+        public const string account_userIsNotAdmin = "Tylko administrator może wykonać tę czynność.";
 
         public const string post_AddingRequest = "Wystąpił błąd podczas wysyłania prośby o dodanie postu.";
         public const string post_DeletingRequest = "Wystąpił błąd podczas wysyłania prośby o usunięcie postu.";

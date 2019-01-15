@@ -10,7 +10,7 @@ namespace FNZ.BL.Services.Interfaces
     public interface IPostService
     {
         Task<ResponseDto<BaseModelDto>> AddPost(PostBindingModel post, string moderatorId);
-        Task<ResponseDto<BaseModelDto>> DeletePost(long postId);
+        Task<ResponseDto<BaseModelDto>> DeletePost(long postId, string moderatorId);
         Task<ResponseDto<BaseModelDto>> EditPost(long postId, PostBindingModel editPostBindingModel);
         Task<ResponseDto<PostSearchDto>> GetAllPosts(PostSearchParameterBindingModel parameters);
         ResponseDto<PostDto> GetPost(long postId);

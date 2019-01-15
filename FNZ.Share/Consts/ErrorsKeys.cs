@@ -9,6 +9,7 @@
         public const string request_Refuse = "requestRefusingError";
         public const string request_Accept = "requestAcceptingError";
         public const string account_userAlreadyExists = "userAlreadyExistError";
+        public const string account_userIsNotAdmin = "userIsNotAdminError";
     }
 }
 

@@ -11,7 +11,6 @@ namespace FNZ.Share.Models
             DogsAdoption,
             CatsAdoption,
             FullfilledDreams,
-            MoneyCollection,
             FoundationLife
         }
 

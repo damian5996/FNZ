@@ -31,6 +31,7 @@ namespace FNZ.BL
             CreateMap<PostBindingModel, Animal>()
                 .ForMember(dest => dest.AddedToSystemAt, opt => opt.Ignore())
                 .ForMember(dest => dest.AdoptionDate, opt => opt.Ignore());
+            CreateMap<ApplicationBindingModel, Application>();
         }
     }
 }

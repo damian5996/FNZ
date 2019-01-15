@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 namespace FNZ.WebApi.Controllers
 {
     [Authorize]
+    [Route("Account")]
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
@@ -97,6 +98,25 @@ namespace FNZ.WebApi.Controllers
 
             var moderatorId = User.Identity.Name;
             var result = await _accountService.ChangePassword(moderatorId, changePasswordBindingModel);
+            if (result.ErrorOccurred)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost("AddModerator")]
+        public async Task<IActionResult> AddModerator([FromForm] string newModeratorEmail, [FromForm] string emailHashed)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var adminId = User.Identity.Name;
+            var result = await _accountService.AddModerator(adminId, emailHashed, newModeratorEmail);
+
             if (result.ErrorOccurred)
             {
                 return BadRequest(result);

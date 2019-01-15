@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +23,13 @@ namespace FNZ.BL.Services
     {
         private readonly UserManager<Moderator> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailService _emailService;
 
-        public AccountService(UserManager<Moderator> userManager, IHttpContextAccessor httpContextAccessor)
+        public AccountService(UserManager<Moderator> userManager, IHttpContextAccessor httpContextAccessor, IEmailService emailService)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
         }
 
         public async Task<ResponseDto<BaseModelDto>> Register(RegisterBindingModel registerBindingModel)
@@ -143,5 +147,21 @@ namespace FNZ.BL.Services
 
             return result;
         }
+
+        public async Task<ResponseDto<BaseModelDto>> AddModerator(string adminId, string emailHashed, string newModeratorEmail)
+        {
+            var result = new ResponseDto<BaseModelDto>();
+            var moderator = await _userManager.FindByIdAsync(adminId);
+            if (!moderator.IsAdmin)
+            {
+                result.Errors.Add(ErrorsValues.account_userIsNotAdmin, ErrorsKeys.account_userIsNotAdmin);
+            }
+
+            await _emailService.SendEmail(newModeratorEmail, "Fundacja Niechcianych Zwierząt - rejestracja",
+                "Witaj! Poniżej znajduje się link przekierowujący na stronę Fundacji Niechcianych Zwierząt. Zostałeś wybrany/a moderatorem strony.\n Zarejestruj się i rzetelnie pełnij swoją funkcję.\n Powodzenia! :)\n http://localhost:8010/app/#!/register/" + emailHashed +"/" + newModeratorEmail);
+            return result;
+        }
+
+        
     }
 }

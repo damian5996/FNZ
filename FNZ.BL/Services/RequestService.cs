@@ -19,20 +19,30 @@ namespace FNZ.BL.Services
         private readonly IRequestRepository _requestRepository;
         private readonly IPostRepository _postRepository;
         private readonly UserManager<Moderator> _userManager;
+        private readonly IAnimalRepository _animalRepository;
 
-        public RequestService(IRequestRepository requestRepository, IPostRepository postRepository, UserManager<Moderator> userManager)
+        public RequestService(IRequestRepository requestRepository, IPostRepository postRepository, UserManager<Moderator> userManager, IAnimalRepository animalRepository)
         {
             _requestRepository = requestRepository;
             _postRepository = postRepository;
             _userManager = userManager;
+            _animalRepository = animalRepository;
         }
 
-        public ResponseDto<RequestsListDto> GetAllRequests(RequestParameterBindingModel parameters)
+        public ResponseDto<RequestsListDto> GetAllRequests(RequestParameterBindingModel parameters, string moderatorId)
         {
             var result = new ResponseDto<RequestsListDto>()
             {
                 Object = new RequestsListDto()
             };
+
+            var user = _userManager.FindByIdAsync(moderatorId);
+            if (!user.Result.IsAdmin)
+            {
+                result.Errors.Add(ErrorsKeys.account_userIsNotAdmin, ErrorsValues.account_userIsNotAdmin);
+                return result;
+            }
+            
             List<Request> requests = new List<Request>();
             if (parameters.ShowAccepted && !parameters.ShowRefused)
             {
@@ -207,6 +217,13 @@ namespace FNZ.BL.Services
                 result.Errors.Add(ErrorsKeys.request_Accept, ErrorsValues.request_AlreadySolved);
                 return result;
             }
+
+            var animal = (Animal) null;
+            if (post.Animal != null)
+            {
+                animal = _animalRepository.Get(a => a.Id == post.Animal.Id);
+            }
+            
             
             request.AcceptanceDate = DateTime.Now;
             var saveRequest = await _requestRepository.SaveAsync();
@@ -214,6 +231,11 @@ namespace FNZ.BL.Services
             {
                 case Enums.Action.Add:
                     post.AddedAt = DateTime.Now;
+                    if (animal != null)
+                    {
+                        animal.AddedToSystemAt = DateTime.Now;
+                        var saveAnimal = _animalRepository.SaveAsync();
+                    }
                     break;
                 case Enums.Action.Edit:
                     var editedPost = _postRepository.Get(p => p.Id == request.EditedPost.Id);

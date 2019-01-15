@@ -20,6 +20,7 @@ namespace FNZ.BL
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<IAnimalRepository, AnimalRepository>();
+            services.AddTransient<IAdoptionRepository, AdoptionRepository>();
         }
     }
 }

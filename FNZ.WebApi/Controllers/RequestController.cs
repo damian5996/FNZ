@@ -50,7 +50,8 @@ namespace FNZ.WebApi.Controllers
         [HttpPost]
         public IActionResult GetAllRequest([FromBody]RequestParameterBindingModel parameters)
         {
-            var result = _requestService.GetAllRequests(parameters);
+            var moderatorId = User.Identity.Name;
+            var result = _requestService.GetAllRequests(parameters, moderatorId);
 
             if (result.ErrorOccurred)
             {

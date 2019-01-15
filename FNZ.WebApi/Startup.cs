@@ -32,6 +32,8 @@ namespace FNZ.WebApi
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAdoptionService, AdoptionService>();
+            services.AddTransient<IEmailService, EmailService>();
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {

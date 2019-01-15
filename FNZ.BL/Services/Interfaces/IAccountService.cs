@@ -15,5 +15,6 @@ namespace FNZ.BL.Services.Interfaces
         Task<ResponseDto<BaseModelDto>> EditProfile(string moderatorId, EditProfileBindingModel editProfileBindingModel);
         Task<ResponseDto<BaseModelDto>> ChangePassword(string moderatorId,
             ChangePasswordBindingModel changePasswordBindingModel);
+        Task<ResponseDto<BaseModelDto>> AddModerator(string adminId, string emailHashed, string newModeratorEmail);
     }
 }

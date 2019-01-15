@@ -16,6 +16,7 @@ namespace FNZ.Data.Data
         {
         }
         public DbSet<Animal> Animals { get; set; }
+        public DbSet<Application> Applications { get; set; }
         public DbSet<Moderator> Moderators { get; set; }
         public DbSet<MoneyCollection> MoneyCollections { get; set; }
         public DbSet<Post> Posts { get; set; }

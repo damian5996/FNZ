@@ -114,7 +114,7 @@ namespace FNZ.BL.Services
             return result;
         }
 
-        public async Task<ResponseDto<BaseModelDto>> DeletePost(long postId)
+        public async Task<ResponseDto<BaseModelDto>> DeletePost(long postId, string moderatorId)
         {
             var result = new ResponseDto<BaseModelDto>();
 
@@ -124,12 +124,13 @@ namespace FNZ.BL.Services
                 result.Errors.Add(ErrorsKeys.post_CreatingRequest, ErrorsValues.post_NotAddedYet);
                 return result;
             }
-
+            var moderator = _userManager.FindByIdAsync(moderatorId);
             var request = new Request()
             {
                 SentAt = DateTime.Now,
                 Post = post,
-                Action = Enums.Action.Delete
+                Action = Enums.Action.Delete,
+                Moderator = moderator.Result
             };
             var insertRequest = await _requestRepository.InsertAsync(request);
             if (!insertRequest)
@@ -237,11 +238,11 @@ namespace FNZ.BL.Services
             IQueryable<Post> posts;
             if (parameters.Category == null)
             {
-                posts = _postRepository.GetAll(p => p.AddedAt != null).AsQueryable();
+                posts = _postRepository.GetAll(p => p.AddedAt != null && p.IsDeleted == false).AsQueryable();
             }
             else
             {
-                posts = _postRepository.GetAll(p => p.AddedAt != null && p.Category == parameters.Category).AsQueryable();
+                posts = _postRepository.GetAll(p => p.AddedAt != null && p.Category == parameters.Category && p.IsDeleted == false).AsQueryable();
             }
             var query = parameters.Query.ToLower();
             if (useFunction)
